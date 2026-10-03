@@ -36,7 +36,7 @@
     "skills"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=24.11.0"
   },
   "scripts": {
     "build": "tsdown",
@@ -46,21 +46,21 @@
     "prepack": "node -e \"const fs=require('node:fs');fs.copyFileSync('../../README.md','./README.md');fs.rmSync('./skills',{recursive:true,force:true});fs.cpSync('../../skills','./skills',{recursive:true})\""
   },
   "dependencies": {
-    "better-sqlite3": "^12.9.0",
-    "commander": "^14.0.3",
-    "drizzle-orm": "^0.45.2",
-    "ignore": "^7.0.5",
-    "open": "^11.0.0",
-    "parse-diff": "^0.11.1",
-    "zod": "^4.3.6"
+    "better-sqlite3": "^13.0.3",
+    "commander": "^15.0.0",
+    "drizzle-orm": "^0.45.3",
+    "ignore": "^7.0.12",
+    "open": "^11.0.4",
+    "parse-diff": "^0.12.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@stagereview/types": "workspace:*",
-    "@types/better-sqlite3": "^7.6.13",
-    "@types/node": "^25.6.0",
-    "drizzle-kit": "^0.31.10",
-    "tsdown": "^0.21.10",
-    "typescript": "^5.6.3",
-    "vitest": "^4.1.5"
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^26.6.4",
+    "drizzle-kit": "^0.31.11",
+    "tsdown": "^0.23.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
   }
 }

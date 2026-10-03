@@ -5,6 +5,7 @@ import { defineConfig } from "vitest/config";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+	test: { exclude: ["**/node_modules/**", "scripts/**"] },
 	resolve: {
 		// `@/*` is the SPA-local alias declared in packages/web/tsconfig.json.
 		// Mirroring it here lets vitest resolve web tests without dragging in

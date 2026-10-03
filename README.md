@@ -39,7 +39,7 @@ npx skills add ReviewStage/stage-cli
 
 ### Requirements
 
-- Node.js 20 or newer
+- Node.js 24.11 or newer
 - A Git repository to review
 - An AI agent that supports skills
 - GitHub CLI (`gh`) installed and authenticated when reviewing GitHub pull requests

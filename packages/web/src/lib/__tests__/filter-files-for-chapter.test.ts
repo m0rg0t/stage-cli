@@ -150,7 +150,7 @@ index 1111111..2222222 100644
 		expect(entries[0]?.file.path).toBe(decodedPath);
 	});
 
-	it("skips C-quoted segments (legacy patches) without crashing the chapter view", () => {
+	it("preserves decoded C-quoted segments alongside other chapter files", () => {
 		const quoted = `diff --git "a/src/ol\\303\\251 file.ts" "b/src/ol\\303\\251 file.ts"
 index 1111111..2222222 100644
 --- "a/src/ol\\303\\251 file.ts"
@@ -167,7 +167,10 @@ index 1111111..2222222 100644
 			{ filePath: decodedPath, oldStart: 10 },
 			{ filePath: "src/foo.ts", oldStart: 10 },
 		]);
-		expect(entries.map((e) => e.file.path)).toEqual(["src/foo.ts"]);
+		expect(entries.map((e) => e.file.path)).toEqual([decodedPath, "src/foo.ts"]);
+		expect(entries[0]?.diff.hunks).toHaveLength(1);
+		expect(entries[0]?.file.additions).toBe(1);
+		expect(entries[0]?.file.deletions).toBe(1);
 	});
 
 	it("uses rename lines to name segments when the git header is ambiguous", () => {

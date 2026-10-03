@@ -17,7 +17,7 @@ TypeScript strict mode (`strict: true`, `noUncheckedIndexedAccess: true`, `verba
 
 ### 2. Route / Server Integration Tests
 
-Test API route handlers through the real `startServer()` HTTP boundary, hitting a real SQLite database created in a temp directory. Mock only what isn't part of the CLI itself (none today — the CLI has no external services).
+Test API route handlers through the real `startServer()` HTTP boundary, hitting a real SQLite database created in a temp directory. GitHub-backed routes must use synthetic `gh` subprocess fixtures; never authenticate or call live GitHub routes in tests.
 
 **This is the highest-ROI test layer.** Most logic worth testing is request handling, schema validation, and database state transitions.
 
@@ -138,3 +138,16 @@ When modifying code that is covered by a slop test (a test that violates the moc
 | New React component (logic-heavy) | Extract logic to `packages/web/src/lib/`, test there | Optional |
 | New React component (display-only) | None | N/A |
 | New schema migration | Route integration that exercises new columns | Required |
+
+## Isolated verification
+
+Run `pnpm test:isolated` to execute the suite with a temporary HOME/XDG configuration,
+fail-closed external-command shims, and a best-effort Node transport guard (not an OS sandbox). CI additionally
+runs it in an OS network namespace containing only loopback. Existing GitHub harnesses
+provide their own synthetic `gh` responses. No real tokens, PRs, or user databases are used.
+
+`pnpm test:migrations` exercises the migration cleanliness check against disposable Git
+repositories, including tracked, staged, untracked, and ignored SQL/metadata output.
+After `pnpm build`, `pnpm test:package` extracts the actual package tarball and checks its
+binary and bundled resources, then creates and reopens a fresh SQLite database through
+the packed CLI. It uses the workspace's locked runtime dependencies.

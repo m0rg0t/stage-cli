@@ -12,9 +12,9 @@ import { Route as rootRouteImport } from "./app/__root";
 import { Route as IndexRouteImport } from "./app/index";
 import { Route as RunsRunIdRouteImport } from "./app/runs.$runId";
 import { Route as RunsRunIdIndexRouteImport } from "./app/runs.$runId.index";
-import { Route as RunsRunIdFilesRouteImport } from "./app/runs.$runId.files";
-import { Route as RunsRunIdChaptersRouteImport } from "./app/runs.$runId.chapters";
 import { Route as RunsRunIdActivityRouteImport } from "./app/runs.$runId.activity";
+import { Route as RunsRunIdChaptersRouteImport } from "./app/runs.$runId.chapters";
+import { Route as RunsRunIdFilesRouteImport } from "./app/runs.$runId.files";
 import { Route as RunsRunIdChaptersIndexRouteImport } from "./app/runs.$runId.chapters.index";
 import { Route as RunsRunIdChaptersChapterNumberRouteImport } from "./app/runs.$runId.chapters.$chapterNumber";
 
@@ -33,9 +33,9 @@ const RunsRunIdIndexRoute = RunsRunIdIndexRouteImport.update({
   path: "/",
   getParentRoute: () => RunsRunIdRoute,
 } as any);
-const RunsRunIdFilesRoute = RunsRunIdFilesRouteImport.update({
-  id: "/files",
-  path: "/files",
+const RunsRunIdActivityRoute = RunsRunIdActivityRouteImport.update({
+  id: "/activity",
+  path: "/activity",
   getParentRoute: () => RunsRunIdRoute,
 } as any);
 const RunsRunIdChaptersRoute = RunsRunIdChaptersRouteImport.update({
@@ -43,9 +43,9 @@ const RunsRunIdChaptersRoute = RunsRunIdChaptersRouteImport.update({
   path: "/chapters",
   getParentRoute: () => RunsRunIdRoute,
 } as any);
-const RunsRunIdActivityRoute = RunsRunIdActivityRouteImport.update({
-  id: "/activity",
-  path: "/activity",
+const RunsRunIdFilesRoute = RunsRunIdFilesRouteImport.update({
+  id: "/files",
+  path: "/files",
   getParentRoute: () => RunsRunIdRoute,
 } as any);
 const RunsRunIdChaptersIndexRoute = RunsRunIdChaptersIndexRouteImport.update({
@@ -148,11 +148,11 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof RunsRunIdIndexRouteImport;
       parentRoute: typeof RunsRunIdRoute;
     };
-    "/runs/$runId/files": {
-      id: "/runs/$runId/files";
-      path: "/files";
-      fullPath: "/runs/$runId/files";
-      preLoaderRoute: typeof RunsRunIdFilesRouteImport;
+    "/runs/$runId/activity": {
+      id: "/runs/$runId/activity";
+      path: "/activity";
+      fullPath: "/runs/$runId/activity";
+      preLoaderRoute: typeof RunsRunIdActivityRouteImport;
       parentRoute: typeof RunsRunIdRoute;
     };
     "/runs/$runId/chapters": {
@@ -162,11 +162,11 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof RunsRunIdChaptersRouteImport;
       parentRoute: typeof RunsRunIdRoute;
     };
-    "/runs/$runId/activity": {
-      id: "/runs/$runId/activity";
-      path: "/activity";
-      fullPath: "/runs/$runId/activity";
-      preLoaderRoute: typeof RunsRunIdActivityRouteImport;
+    "/runs/$runId/files": {
+      id: "/runs/$runId/files";
+      path: "/files";
+      fullPath: "/runs/$runId/files";
+      preLoaderRoute: typeof RunsRunIdFilesRouteImport;
       parentRoute: typeof RunsRunIdRoute;
     };
     "/runs/$runId/chapters/": {

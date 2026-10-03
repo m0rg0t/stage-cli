@@ -7,44 +7,91 @@ on:
     branches: [main]
   merge_group:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   ci:
-    name: CI
+    name: CI (Node ${{ matrix.node }})
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["24.11.0", "26"]
+    env:
+      HUSKY: "0"
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version-file: .nvmrc
+          node-version: ${{ matrix.node }}
           cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Check Drizzle migrations are up to date
+      - name: Record verification identity
         run: |
-          pnpm db:generate
-          git diff --exit-code packages/cli/drizzle/ || (echo "::error::Drizzle migrations are out of date. Run 'pnpm db:generate' and commit." && exit 1)
+          mkdir -p output
+          git rev-parse HEAD > output/head-sha.txt
+          node --version > output/node-version.txt
+          pnpm --version > output/pnpm-version.txt
+
+      - name: Check migration guard and generated migrations
+        run: |
+          pnpm test:migrations | tee output/migration-tests.log
+          pnpm db:generate | tee output/db-generate.log
+          pnpm db:check
 
       - name: Lint
-        run: pnpm lint
+        run: pnpm lint | tee output/lint.log
 
       - name: Type check
-        run: pnpm typecheck
+        run: pnpm typecheck | tee output/typecheck.log
 
-      - name: Test
-        run: pnpm test
+      - name: Test with loopback-only networking
+        run: |
+          sudo --preserve-env=PATH unshare --net bash -euc '
+            ip link set lo up
+            exec setpriv --reuid="$1" --regid="$2" --init-groups bash scripts/test-isolated.sh
+          ' -- "$(id -u)" "$(id -g)" 2>&1 | tee output/tests.log
 
       - name: Build
-        run: pnpm build
+        run: pnpm build | tee output/build.log
+
+      - name: Pack CLI
+        run: pnpm --dir packages/cli pack --out ../../output/stagereview.tgz
+
+      - name: Test packed CLI with loopback-only networking
+        run: |
+          sudo --preserve-env=PATH unshare --net bash -euc '
+            ip link set lo up
+            exec setpriv --reuid="$1" --regid="$2" --init-groups bash scripts/test-isolated.sh --package
+          ' -- "$(id -u)" "$(id -g)" 2>&1 | tee output/package-contract.log
+
+      - name: Save exact-head verification evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: verification-node-${{ matrix.node }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: output/
+          retention-days: 7

@@ -27,7 +27,11 @@
     "format": "biome format --write .",
     "typecheck": "pnpm -r typecheck",
     "db:generate": "pnpm --filter stagereview db:generate",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:migrations": "node --test scripts/check-migrations.test.js scripts/offline-network-guard.test.js",
+    "db:check": "node scripts/check-migrations.js",
+    "test:isolated": "bash scripts/test-isolated.sh",
+    "test:package": "pnpm --dir packages/cli pack --out ../../output/stagereview.tgz && bash scripts/test-isolated.sh --package"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,md}": [

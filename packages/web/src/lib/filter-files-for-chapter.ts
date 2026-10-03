@@ -240,8 +240,7 @@ export function filterFilesForChapter(
 
 /**
  * Parse one file's patch text through Pierre, skipping segments its parser
- * rejects (e.g. C-quoted header paths from patches generated before the CLI
- * disabled core.quotepath) instead of crashing the whole chapter view.
+ * rejects instead of crashing the whole chapter view.
  */
 function parseSegment(text: string): FileDiffMetadata | null {
 	try {

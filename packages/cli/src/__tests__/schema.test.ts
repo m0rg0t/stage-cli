@@ -89,18 +89,19 @@ describe("ChaptersFileSchema", () => {
 		expect(result.chapters[0]?.keyChanges[0]?.lineRefs[0]?.side).toBe("additions");
 	});
 
-	it.each([
-		"work",
-		"staged",
-		"unstaged",
-	] as const)("accepts workingTree scope for %s changes", (ref) => {
-		const result = ChaptersFileSchema.parse(makeFixture({ scope: makeWorkingTreeScope({ ref }) }));
+	it.each(["work", "staged", "unstaged"] as const)(
+		"accepts workingTree scope for %s changes",
+		(ref) => {
+			const result = ChaptersFileSchema.parse(
+				makeFixture({ scope: makeWorkingTreeScope({ ref }) }),
+			);
 
-		expect(result.scope.kind).toBe("workingTree");
-		if (result.scope.kind === "workingTree") {
-			expect(result.scope.ref).toBe(ref);
-		}
-	});
+			expect(result.scope.kind).toBe("workingTree");
+			if (result.scope.kind === "workingTree") {
+				expect(result.scope.ref).toBe(ref);
+			}
+		},
+	);
 
 	it("allows empty chapter lists and chapters without anchored hunks", () => {
 		expect(() => ChaptersFileSchema.parse(makeFixture({ chapters: [] }))).not.toThrow();

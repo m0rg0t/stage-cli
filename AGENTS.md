@@ -97,7 +97,7 @@ Vite app with React 19, Tailwind 4, and shadcn/ui (new-york style, zinc base, lu
 
 ### Key Technologies
 
-- **CLI:** Commander, Node 20+, ESM only
+- **CLI:** Commander, Node 24.11+, ESM only
 - **Server:** Node `http` (no Express/Fastify/oRPC)
 - **Database:** Drizzle ORM, SQLite via `better-sqlite3`
 - **Frontend:** Vite, React 19, Tailwind CSS 4, shadcn/ui

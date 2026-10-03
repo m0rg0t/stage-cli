@@ -1,6 +1,14 @@
 packages:
   - "packages/*"
 
-onlyBuiltDependencies:
-  - better-sqlite3
-  - esbuild
+minimumReleaseAgeExclude:
+  - lucide-react@1.51.0
+
+allowBuilds:
+  esbuild: true
+
+overrides:
+  "esbuild": "0.28.2"
+  "@babel/core": "7.29.7"
+  "browserslist": "4.29.3"
+  "baseline-browser-mapping": "2.11.27"

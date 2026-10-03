@@ -7,7 +7,7 @@ import {
 	PULL_REQUEST_STATUS,
 } from "@stagereview/types/pull-request";
 import { useMutation } from "@tanstack/react-query";
-import { Check, GitBranch, Github, Pencil, ScanSearch, X } from "lucide-react";
+import { Check, ExternalLink, GitBranch, Pencil, ScanSearch, X } from "lucide-react";
 import { Fragment, useCallback, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { CIChecks } from "@/components/pull-request/ci-checks";
@@ -203,7 +203,7 @@ export function PullRequestHeader({ pullRequest, mergeInfo }: PullRequestHeaderP
 							rel="noopener noreferrer"
 							aria-label="Open in GitHub"
 						>
-							<Github className="size-4" aria-hidden="true" />
+							<ExternalLink className="size-4" aria-hidden="true" />
 						</a>
 					</Button>
 				</TooltipTrigger>

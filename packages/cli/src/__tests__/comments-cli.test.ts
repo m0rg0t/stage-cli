@@ -190,9 +190,12 @@ describe("comments CLI — argument validation", () => {
 		["create", "--file", "src/foo.ts", "--line", "3", "--body", "   "],
 		["reply", "abcdef-thread", "--body", "\n\t"],
 		["resolve", "abcdef-thread", "--body", " "],
-	])("rejects a whitespace-only --body for %s before touching git or the database", async (...argv) => {
-		await expect(commentsCommand().parseAsync(argv, { from: "user" })).rejects.toThrow(
-			"--body must not be empty.",
-		);
-	});
+	])(
+		"rejects a whitespace-only --body for %s before touching git or the database",
+		async (...argv) => {
+			await expect(commentsCommand().parseAsync(argv, { from: "user" })).rejects.toThrow(
+				"--body must not be empty.",
+			);
+		},
+	);
 });
